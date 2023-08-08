@@ -1,4 +1,4 @@
-namespace AutomatedCleaning;
+namespace AutomatedCleaning.Cleaner;
 
 public static class WorkBattery
 {
@@ -13,4 +13,3 @@ public static class WorkBattery
             _ => 0
         };
 }
-

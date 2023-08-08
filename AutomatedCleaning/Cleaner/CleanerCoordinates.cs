@@ -1,19 +1,16 @@
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using AutomatedCleaning.Cleaner.Enums;
 
 namespace AutomatedCleaning.Cleaner;
 
 public class CleanerCoordinates : Coordinates
 {
-     //public Coordinates Coordinates { get; set; }
+    //public Coordinates Coordinates { get; set; }
     // public int X { get; set; }
     //
     // public int Y { get; set; }
 
-    [RegularExpression("N|S|W|E", ErrorMessage = "The Face must match 'N' or 'S' or 'W' or 'E' only.")]
-    [Required(AllowEmptyStrings = false)]
-    [DisplayFormat(ConvertEmptyStringToNull = false)]
     public string Facing { get; set; }
 
     public CleanerCoordinates(string face, int x, int y)
@@ -27,92 +24,24 @@ public class CleanerCoordinates : Coordinates
     {
     }
 
-    private List<string> direction = new List<string>()
+    private readonly Dictionary<string, string> _ternFacingClockwise = new()
     {
-        Face.N.ToString(),
-        Face.E.ToString(),
-        Face.S.ToString(),
-        Face.W.ToString(),
+        [Face.N.ToString()] = Face.E.ToString(),
+        [Face.W.ToString()] = Face.N.ToString(),
+        [Face.S.ToString()] = Face.W.ToString(),
+        [Face.E.ToString()] = Face.S.ToString(),
     };
 
-    // return current.Next ?? current.List.First;
-
-    // public void TernRight()
-    // {
-    //     for (int i = 0; i < direction.Count; i++)
-    //     {
-    //         if (direction[i] == Facing)
-    //         {
-    //             var val = direction[i+1];
-    //             Facing = val;
-    //             break;
-    //         }
-    //     }
-    // }
-    
-    // public void TernLeft()
-    // {
-    //     for (int i = 0; i < direction.Count; i++)
-    //     {
-    //         if (direction[i] == Facing)
-    //         {
-    //             var val = direction[i - 1] ?? direction[direction.Count-1];
-    //             Facing = val;
-    //             break;
-    //         }
-    //     }
-    // }
-    
     public void TernRight()
     {
-        if (Facing.Equals(Face.N.ToString()))
-        {
-            Facing = Face.E.ToString();
-            return;
-        }
-    
-        if (Facing.Equals(Face.W.ToString()))
-        {
-            Facing = Face.N.ToString();
-            return;
-        }
-    
-        if (Facing.Equals(Face.S.ToString()))
-        {
-            Facing = Face.W.ToString();
-            return;
-        }
-    
-        if (Facing.Equals(Face.E.ToString()))
-        {
-            Facing = Face.S.ToString();
-        }
+        var direction = _ternFacingClockwise.First(x => x.Key.Equals(Facing));
+        Facing = direction.Value;
     }
 
-   public void TernLeft()
+    public void TernLeft()
     {
-        if (Facing.Equals(Face.N.ToString()))
-        {
-            Facing = Face.W.ToString();
-            return;
-        }
-    
-        if (Facing.Equals(Face.W.ToString()))
-        {
-            Facing = Face.S.ToString();
-            return;
-        }
-    
-        if (Facing.Equals(Face.S.ToString()))
-        {
-            Facing = Face.E.ToString();
-            return;
-        }
-    
-        if (Facing.Equals(Face.E.ToString()))
-        {
-            Facing = Face.N.ToString();
-        }
+        var direction = _ternFacingClockwise.First(x => x.Value.Equals(Facing));
+        Facing = direction.Key;
     }
 
     public void StepForward()

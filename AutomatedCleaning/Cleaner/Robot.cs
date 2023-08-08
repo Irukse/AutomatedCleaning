@@ -26,9 +26,8 @@ public static class Robot
         {
             _capacityBattery =
                 GetCapacityBattery(finalInformation.FinalBattary, WorkBattery.GetWorkCapacityBattery(command));
-            
-            
-            
+
+
             if (_capacityBattery < 0)
             {
                 return finalInformation;
@@ -44,9 +43,10 @@ public static class Robot
                     finalInformation,
                     startInformation.Map,
                     RetreatStrategyCase.Strategy);
-                
-               VisitedPoints.RecordVisitedPoints(command, finalInformation, finalInformation.FinalCoordinates.X, finalInformation.FinalCoordinates.Y);
-    
+
+                VisitedPoints.RecordVisitedPoints(command, finalInformation, finalInformation.FinalCoordinates.X,
+                    finalInformation.FinalCoordinates.Y);
+
                 continue;
             }
 
