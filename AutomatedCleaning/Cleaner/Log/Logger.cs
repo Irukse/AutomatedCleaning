@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,6 +36,18 @@ public class Logger
         _blockingCollection.Add(
             $"{DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss.fff")} действие: " +
                 $"{action}, код: {command.ToString()}");
+    }
+    
+    public static void WriteLog(string action, string[] command)
+    {
+        var sb = new StringBuilder();
+        foreach (var com in command)
+        {
+            sb.Append(com);
+        }
+        _blockingCollection.Add(
+            $"{DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss.fff")} действие: " +
+            $"{action}, код: {sb.ToString()}");
     }
 
     public static void Flush()

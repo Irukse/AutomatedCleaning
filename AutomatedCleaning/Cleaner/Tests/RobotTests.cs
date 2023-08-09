@@ -15,7 +15,7 @@ public class RobotTests
     {
         //Arrange
         var map = InitialMap();
-        var start = InitialCleanerCoordinates(3, 3, "S");
+        var start = InitialCleanerCoordinates(3, 0, "N");
         var command = InitialCommand();
         var battery = 80;
         var startInfo = new StartInformation(map, start, command, battery);
@@ -167,7 +167,7 @@ public class RobotTests
             { "S", "S", "S", "S" },
             { "S", "S", "C", "S" },
             { "S", "S", "S", "S" },
-            { "S", "S", "S", "S" },
+            { "S", null, "S", "S" },
         };
     }
 
@@ -183,7 +183,7 @@ public class RobotTests
 
     private List<string> InitialCommand()
     {
-        return new List<string>() { "A", "C", "A", "C", "TR", "A", "C" };
+        return new List<string>() { "TL", "A", "C", "A", "C", "TR", "A", "C" };
     }
 
     #endregion

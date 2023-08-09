@@ -24,26 +24,77 @@ public class CleanerCoordinates : Coordinates
     {
     }
 
-    private readonly Dictionary<string, string> _ternFacingClockwise = new()
-    {
-        [Face.N.ToString()] = Face.E.ToString(),
-        [Face.W.ToString()] = Face.N.ToString(),
-        [Face.S.ToString()] = Face.W.ToString(),
-        [Face.E.ToString()] = Face.S.ToString(),
-    };
+    // private readonly Dictionary<string, string> _ternFacingClockwise = new()
+    // {
+    //     [Face.N.ToString()] = Face.E.ToString(),
+    //     [Face.W.ToString()] = Face.N.ToString(),
+    //     [Face.S.ToString()] = Face.W.ToString(),
+    //     [Face.E.ToString()] = Face.S.ToString(),
+    // };
+    //
+    // public void TernRight()
+    // {
+    //     var direction = _ternFacingClockwise.First(x => x.Key.Equals(Facing));
+    //     Facing = direction.Value;
+    // }
+    //
+    // public void TernLeft()
+    // {
+    //     var direction = _ternFacingClockwise.First(x => x.Value.Equals(Facing));
+    //     Facing = direction.Key;
+    // }
 
     public void TernRight()
     {
-        var direction = _ternFacingClockwise.First(x => x.Key.Equals(Facing));
-        Facing = direction.Value;
+        if (Facing.Equals(Face.N.ToString()))
+        {
+            Facing = Face.E.ToString();
+            return;
+        }
+    
+        if (Facing.Equals(Face.W.ToString()))
+        {
+            Facing = Face.N.ToString();
+            return;
+        }
+    
+        if (Facing.Equals(Face.S.ToString()))
+        {
+            Facing = Face.W.ToString();
+            return;
+        }
+    
+        if (Facing.Equals(Face.E.ToString()))
+        {
+            Facing = Face.S.ToString();
+        }
     }
 
     public void TernLeft()
     {
-        var direction = _ternFacingClockwise.First(x => x.Value.Equals(Facing));
-        Facing = direction.Key;
+        if (Facing.Equals(Face.N.ToString()))
+        {
+            Facing = Face.W.ToString();
+            return;
+        }
+    
+        if (Facing.Equals(Face.W.ToString()))
+        {
+            Facing = Face.S.ToString();
+            return;
+        }
+    
+        if (Facing.Equals(Face.S.ToString()))
+        {
+            Facing = Face.E.ToString();
+            return;
+        }
+    
+        if (Facing.Equals(Face.E.ToString()))
+        {
+            Facing = Face.N.ToString();
+        }
     }
-
     public void StepForward()
     {
         if (Facing.Equals(Face.N.ToString()))

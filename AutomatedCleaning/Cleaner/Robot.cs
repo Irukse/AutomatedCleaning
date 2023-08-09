@@ -24,6 +24,7 @@ public static class Robot
 
         foreach (var command in startInformation.Commands)
         {
+            Logger.WriteLog("command", command);
             _capacityBattery =
                 GetCapacityBattery(finalInformation.FinalBattary, WorkBattery.GetWorkCapacityBattery(command));
 
@@ -55,7 +56,7 @@ public static class Robot
             finalInformation.FinalBattary = _capacityBattery;
 
             VisitedPoints.RecordVisitedPoints(command, finalInformation, robotStep.X, robotStep.Y);
-            Logger.WriteLog("command", command);
+            
         }
 
         return (finalInformation);

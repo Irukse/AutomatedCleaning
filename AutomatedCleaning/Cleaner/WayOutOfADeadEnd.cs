@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using System.Linq;
 using AutomatedCleaning.Cleaner.Log;
 
 namespace AutomatedCleaning.Cleaner;
 
 public static class WayOutOfADeadEnd
 {
-    private static int _countNext;
+    private static int _countNext = 0;
 
     public static FinalInformation GetRetreatStrategyCoordinates(
         FinalInformation finalInformation,
@@ -13,40 +14,26 @@ public static class WayOutOfADeadEnd
         string[][] strategy)
     {
         var flag = false;
-        for (var i = 0; i < strategy.Length; i++)
+        for (var i = _countNext; i < strategy.Length; i++)
         {
             // выход из стратегии если робот застрял
+            _countNext++;
+           
 
-            for (var j = 0; j < strategy[i].Length; j++)
-            {
-                if (_countNext != j)
-                {
-                    _countNext = 0;
-                    break;
-                }
+            var firstVisited = finalInformation.Visited.Count;
+            //var strategyList = new List<string> { strategy[i] };
 
-                _countNext++;
+            Logger.WriteLog("strategy", strategy[i]);
 
-                var firstVisited = finalInformation.Visited.Count;
-                var strategyList = new List<string> { strategy[i][j] };
-
-                Logger.WriteLog("strategy", strategy[i][j]);
-
-                var startInfo =
-                    InitialStartInformation(finalInformation, map, strategyList);
-
-                finalInformation = Robot.GetClean(startInfo);
-
-                var secondVisited = finalInformation.Visited.Count;
-
-                if (firstVisited == secondVisited) continue;
-                flag = true;
-                break;
-            }
-
-            if (flag) break;
+            var startInfo =
+                InitialStartInformation(finalInformation, map, strategy[i].ToList());
+            finalInformation = Robot.GetClean(startInfo);
+            var secondVisited = finalInformation.Visited.Count;
+            if (firstVisited < secondVisited) break;
+          
         }
 
+        _countNext = 0;
         return finalInformation;
     }
 
