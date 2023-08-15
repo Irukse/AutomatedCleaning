@@ -12,16 +12,25 @@ public class StartInformation
     private const string RangeExceptionMessage =
         "The position of the cleaner is set incorrectly, cleaner out of bounds";
 
-    public StartInformation(string[,] map, CleanerCoordinates start, List<string> commands, int battery)
+    public StartInformation(string[,] map, CleanerCoordinates start, List<string> commands, int battery,
+        List<Coordinates> visited, List<Coordinates> cleaned)
     {
         Map = map;
         Start = start;
         Commands = commands;
         Battery = battery;
+        Visited = visited;
+        Cleaned = cleaned;
 
         ChangeNullToZero(map);
 
         var startRobotLocation = CheckStartCoordinate(map, start.X, start.Y);
+
+        if (visited.Count == 0)
+        {
+            var startVisited = new Coordinates(start.X, start.Y);
+            visited.Add(startVisited);
+        }
 
         if (startRobotLocation is "0" or "C")
         {
@@ -42,6 +51,9 @@ public class StartInformation
     public List<string> Commands { get; set; }
 
     public int Battery { get; set; }
+
+    public List<Coordinates> Visited { get; set; }
+    public List<Coordinates> Cleaned { get; set; }
 
     private string CheckStartCoordinate(string[,] map, int x, int y)
     {

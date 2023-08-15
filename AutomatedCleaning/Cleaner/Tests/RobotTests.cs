@@ -18,7 +18,8 @@ public class RobotTests
         var start = InitialCleanerCoordinates(3, 0, "N");
         var command = InitialCommand();
         var battery = 80;
-        var startInfo = new StartInformation(map, start, command, battery);
+        var startInfo = new StartInformation(map, start, command, battery, new List<Coordinates>(),
+            new List<Coordinates>());
 
         //Act
         var result = Robot.GetClean(startInfo);
@@ -39,11 +40,12 @@ public class RobotTests
             { "S", "C", "C", "C" },
         };
 
-        var start = InitialCleanerCoordinates(3, 3, "S");
+        var start = InitialCleanerCoordinates(3, 0, "S");
         var command = InitialCommand();
         var battery = 80;
 
-        var startInfo = new StartInformation(map, start, command, battery);
+        var startInfo = new StartInformation(map, start, command, battery, new List<Coordinates>(),
+            new List<Coordinates>());
 
         //Act
         var result = Robot.GetClean(startInfo);
@@ -63,7 +65,8 @@ public class RobotTests
         var battery = 80;
 
         //Assert
-        Assert.Throws<ArgumentException>(() => new StartInformation(map, start, command, battery));
+        Assert.Throws<ArgumentException>(() =>
+            new StartInformation(map, start, command, battery, new List<Coordinates>(), new List<Coordinates>()));
     }
 
     [Test]
@@ -76,7 +79,8 @@ public class RobotTests
         var battery = -2;
 
         //Act
-        StartInformation startInfo = new StartInformation(map, start, command, battery);
+        StartInformation startInfo = new StartInformation(map, start, command, battery, new List<Coordinates>(),
+            new List<Coordinates>());
         StartInformationValidator validator = new StartInformationValidator();
 
         //Assert
@@ -93,7 +97,8 @@ public class RobotTests
         var battery = 2;
 
         //Act
-        StartInformation startInfo = new StartInformation(map, start, command, battery);
+        StartInformation startInfo = new StartInformation(map, start, command, battery, new List<Coordinates>(),
+            new List<Coordinates>());
         StartInformationValidator validator = new StartInformationValidator();
 
         //Assert
@@ -110,7 +115,8 @@ public class RobotTests
         var battery = 2;
 
         //Act
-        StartInformation startInfo = new StartInformation(map, start, command, battery);
+        StartInformation startInfo = new StartInformation(map, start, command, battery, new List<Coordinates>(),
+            new List<Coordinates>());
         StartInformationValidator validator = new StartInformationValidator();
 
         //Assert
@@ -127,7 +133,8 @@ public class RobotTests
         var battery = 80;
 
         //Assert
-        Assert.Throws<IndexOutOfRangeException>(() => new StartInformation(map, start, command, battery));
+        Assert.Throws<IndexOutOfRangeException>(() =>
+            new StartInformation(map, start, command, battery, new List<Coordinates>(), new List<Coordinates>()));
     }
 
     [Test]
@@ -149,7 +156,8 @@ public class RobotTests
         var command = InitialCommand();
         var battery = 80;
 
-        var startInfo = new StartInformation(map, start, command, battery);
+        var startInfo = new StartInformation(map, start, command, battery, new List<Coordinates>(),
+            new List<Coordinates>());
 
         //Act
         var result = Robot.GetClean(startInfo);

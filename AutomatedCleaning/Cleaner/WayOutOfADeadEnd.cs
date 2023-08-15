@@ -11,26 +11,24 @@ public static class WayOutOfADeadEnd
     public static FinalInformation GetRetreatStrategyCoordinates(
         FinalInformation finalInformation,
         string[,] map,
-        string[][] strategy)
+        string[][] strategy,
+        List<Coordinates> visited,
+        List<Coordinates> cleaned)
     {
-        var flag = false;
         for (var i = _countNext; i < strategy.Length; i++)
         {
-            // выход из стратегии если робот застрял
             _countNext++;
-           
 
             var firstVisited = finalInformation.Visited.Count;
-            //var strategyList = new List<string> { strategy[i] };
 
             Logger.WriteLog("strategy", strategy[i]);
 
             var startInfo =
-                InitialStartInformation(finalInformation, map, strategy[i].ToList());
+                InitialStartInformation(finalInformation, map, strategy[i].ToList(), visited, cleaned);
             finalInformation = Robot.GetClean(startInfo);
+
             var secondVisited = finalInformation.Visited.Count;
             if (firstVisited < secondVisited) break;
-          
         }
 
         _countNext = 0;
@@ -40,7 +38,9 @@ public static class WayOutOfADeadEnd
     private static StartInformation InitialStartInformation(
         FinalInformation finalInformation,
         string[,] map,
-        List<string> strategy)
+        List<string> strategy,
+        List<Coordinates> visited,
+        List<Coordinates> cleaned)
     {
         var cleanerCoordinates = new CleanerCoordinates()
         {
@@ -52,7 +52,13 @@ public static class WayOutOfADeadEnd
         var command = strategy;
 
         var startInfo =
-            new StartInformation(map, cleanerCoordinates, command, finalInformation.FinalBattary);
+            new StartInformation(
+                map,
+                cleanerCoordinates,
+                command,
+                finalInformation.FinalBattary,
+                finalInformation.Visited,
+                finalInformation.Cleaned);
 
         return startInfo;
     }

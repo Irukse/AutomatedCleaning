@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using AutomatedCleaning.Cleaner.Log;
 
 namespace AutomatedCleaning.Cleaner;
@@ -11,8 +10,8 @@ public static class Robot
     {
         var finalInformation = new FinalInformation
         {
-            Visited = new List<Coordinates>(),
-            Cleaned = new List<Coordinates>(),
+            Visited = startInformation.Visited,
+            Cleaned = startInformation.Cleaned,
             FinalCoordinates = new CleanerCoordinates(
                 startInformation.Start.Facing,
                 startInformation.Start.X,
@@ -20,14 +19,11 @@ public static class Robot
             FinalBattary = startInformation.Battery
         };
 
-        finalInformation.Visited.Add(new Coordinates(startInformation.Start.X, startInformation.Start.Y));
-
         foreach (var command in startInformation.Commands)
         {
             Logger.WriteLog("command", command);
             _capacityBattery =
                 GetCapacityBattery(finalInformation.FinalBattary, WorkBattery.GetWorkCapacityBattery(command));
-
 
             if (_capacityBattery < 0)
             {
@@ -43,10 +39,9 @@ public static class Robot
                 finalInformation = WayOutOfADeadEnd.GetRetreatStrategyCoordinates(
                     finalInformation,
                     startInformation.Map,
-                    RetreatStrategyCase.Strategy);
-
-                VisitedPoints.RecordVisitedPoints(command, finalInformation, finalInformation.FinalCoordinates.X,
-                    finalInformation.FinalCoordinates.Y);
+                    RetreatStrategyCase.Strategy,
+                    finalInformation.Visited,
+                    finalInformation.Cleaned);
 
                 continue;
             }
@@ -56,7 +51,6 @@ public static class Robot
             finalInformation.FinalBattary = _capacityBattery;
 
             VisitedPoints.RecordVisitedPoints(command, finalInformation, robotStep.X, robotStep.Y);
-            
         }
 
         return (finalInformation);
