@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace AutomatedCleaning.Cleaner;
 
@@ -12,25 +13,17 @@ public class StartInformation
     private const string RangeExceptionMessage =
         "The position of the cleaner is set incorrectly, cleaner out of bounds";
 
-    public StartInformation(string[,] map, CleanerCoordinates start, List<string> commands, int battery,
-        List<Coordinates> visited, List<Coordinates> cleaned)
+    [JsonConstructor]
+    public StartInformation(string[,] map, CleanerCoordinates start, List<string> commands, int battery)
     {
         Map = map;
         Start = start;
         Commands = commands;
         Battery = battery;
-        Visited = visited;
-        Cleaned = cleaned;
 
         ChangeNullToZero(map);
 
         var startRobotLocation = CheckStartCoordinate(map, start.X, start.Y);
-
-        if (visited.Count == 0)
-        {
-            var startVisited = new Coordinates(start.X, start.Y);
-            visited.Add(startVisited);
-        }
 
         if (startRobotLocation is "0" or "C")
         {
@@ -44,6 +37,23 @@ public class StartInformation
         }
     }
 
+    public StartInformation(string[,] map, CleanerCoordinates start, List<string> commands, int battery,
+        List<Coordinates> visited, List<Coordinates> cleaned)
+    {
+        Map = map;
+        Start = start;
+        Commands = commands;
+        Battery = battery;
+        Visited = visited;
+        Cleaned = cleaned;
+
+        if (visited.Count == 0)
+        {
+            var startVisited = new Coordinates(start.X, start.Y);
+            visited.Add(startVisited);
+        }
+    }
+
     public string[,] Map { get; set; }
 
     public CleanerCoordinates Start { get; set; }
@@ -52,8 +62,9 @@ public class StartInformation
 
     public int Battery { get; set; }
 
-    public List<Coordinates> Visited { get; set; }
-    public List<Coordinates> Cleaned { get; set; }
+    public List<Coordinates> Visited { get; set; } = new List<Coordinates>();
+
+    public List<Coordinates> Cleaned { get; set; } = new List<Coordinates>();
 
     private string CheckStartCoordinate(string[,] map, int x, int y)
     {
